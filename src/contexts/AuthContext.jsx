@@ -41,12 +41,10 @@ export const AuthProvider = ({ children }) => {
         setUser(profile.user);
         setIsAuthenticated(true);
         setNavigation(navData);
-        // console.log(`[AUTH] Sovereignty Synced: ${navData.length} Modules Active`);
         return true;
       }
       return false;
     } catch (err) {
-      // console.error("[AUTH] Sovereignty Sync Failure:", err);
       return false;
     }
   };
@@ -69,13 +67,20 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      // 1. Authenticate
-      await api.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
+      // 1. Authenticate & Capture Token
+      const loginRes = await api.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
+      const { accessToken } = loginRes.data.data;
+      
+      // Store token for Header Sovereignty
+      localStorage.setItem('accessToken', accessToken);
 
-      // 2. Hydrate Full Profile & Registry (The fix for missing sidebar)
+      // 2. Hydrate Full Profile & Registry
       const success = await syncSovereignty();
 
-      if (!success) throw new Error("Profile hydration failed");
+      if (!success) {
+        localStorage.removeItem('accessToken');
+        throw new Error("Profile hydration failed");
+      }
 
       return { success: true };
     } catch (err) {
@@ -85,7 +90,6 @@ export const AuthProvider = ({ children }) => {
         message: err.response?.data?.message || 'Login failed'
       };
     } finally {
-      // Small delay to let React process the multiple state updates
       setTimeout(() => setLoading(false), 100);
     }
   };
@@ -94,6 +98,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await api.post(API_ENDPOINTS.AUTH.LOGOUT);
     } finally {
+      localStorage.removeItem('accessToken');
       setUser(null);
       setIsAuthenticated(false);
       setNavigation([]);
