@@ -8,7 +8,6 @@ const api = axios.create({
   },
 });
 
-// Request interceptor for attaching the Bearer token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
@@ -20,17 +19,13 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for handling token expiration
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // 1. If it's a 401 and we haven't tried to refresh yet
     if (error.response?.status === 401 && !originalRequest._retry) {
 
-      // 2. IMPORTANT: If the request was for /refresh or we are already on /login, 
-      // do NOT try to refresh or redirect again (prevents infinite loop)
       if (originalRequest.url.includes('/auth/refresh') || window.location.pathname === '/login') {
         return Promise.reject(error);
       }
@@ -38,7 +33,6 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // Call refresh token endpoint
         const refreshRes = await axios.post(
           `${api.defaults.baseURL}/auth/refresh`,
           {},
@@ -50,10 +44,9 @@ api.interceptors.response.use(
           localStorage.setItem('accessToken', accessToken);
         }
 
-        // Retry original request if refresh succeeded
         return api(originalRequest);
       } catch (refreshError) {
-        // If refresh fails and we aren't on login page, then redirect
+
         if (window.location.pathname !== '/login') {
           localStorage.removeItem('accessToken');
           localStorage.removeItem('user');

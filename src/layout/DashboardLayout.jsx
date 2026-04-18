@@ -59,7 +59,7 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className="flex h-screen bg-slate-50/50 overflow-hidden relative">
-      <ConfirmModal 
+      <ConfirmModal
         isOpen={isLogoutModalOpen}
         onClose={() => setLogoutModalOpen(false)}
         onConfirm={handleLogout}
@@ -69,27 +69,27 @@ const DashboardLayout = ({ children }) => {
       />
 
       {isSidebarOpen && window.innerWidth < 1024 && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[45] transition-opacity animate-in fade-in duration-300"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      <Sidebar 
-        isOpen={isSidebarOpen} 
-        setOpen={setSidebarOpen} 
-        modules={dynamicModules} 
+      <Sidebar
+        isOpen={isSidebarOpen}
+        setOpen={setSidebarOpen}
+        modules={dynamicModules}
         onLogout={() => setLogoutModalOpen(true)}
-        hasPermission={hasPermission} // 🔥 RECONNECTED
+        hasPermission={hasPermission}
       />
 
       <main className="flex-1 flex flex-col overflow-hidden w-full">
-        <Header 
-          user={user} 
-          setSidebarOpen={setSidebarOpen} 
-          isSidebarOpen={isSidebarOpen} 
+        <Header
+          user={user}
+          setSidebarOpen={setSidebarOpen}
+          isSidebarOpen={isSidebarOpen}
         />
-        
+
         <section className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
           {children}
         </section>

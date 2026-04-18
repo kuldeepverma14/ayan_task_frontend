@@ -4,8 +4,8 @@ import API_ENDPOINTS from '../api/endpoints';
 import Pagination from '../components/Pagination';
 import { toast } from 'react-hot-toast';
 import {
-  History, Search, Filter,
-  Clock, Download, Loader2,
+  History, Search,
+  Clock, Loader2,
   User, Globe, RotateCcw
 } from 'lucide-react';
 
@@ -13,7 +13,6 @@ const AuditLogs = () => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Standardized Pagination State
   const [pagination, setPagination] = useState({
     total: 0,
     totalPages: 1,
@@ -38,7 +37,6 @@ const AuditLogs = () => {
 
       setLogs(data.items || []);
 
-      // Ensure we map correctly to the standardized pagination component props
       setPagination({
         total: data.total ?? 0,
         totalPages: data.totalPages ?? 1,
@@ -79,7 +77,6 @@ const AuditLogs = () => {
       </div>
 
       <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden flex flex-col">
-        {/* Simplified Filter Bar */}
         <div className="p-6 border-b border-slate-50 flex flex-col xl:flex-row gap-4 justify-between bg-slate-50/10">
           <div className="relative group max-w-sm w-full">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 transition-colors" size={18} />

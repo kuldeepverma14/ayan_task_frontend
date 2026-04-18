@@ -26,7 +26,6 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
-    // Apply strict validation at login also
     const passwordError = validatePassword(password);
     if (passwordError) {
       setError(passwordError);
@@ -40,7 +39,7 @@ const Login = () => {
     if (result.success) {
       const userObj = JSON.parse(localStorage.getItem('user'));
       const roleName = userObj?.role?.name?.replace('_', ' ') || 'User';
-      
+
       toast.success(
         <div>
           <p className="font-bold">Welcome back!</p>
@@ -98,7 +97,7 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <button 
+                <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors"

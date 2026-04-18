@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import api from '../api/axios';
 import API_ENDPOINTS from '../api/endpoints';
 import { toast } from 'react-hot-toast';
-import { 
-  Shield, Users, Settings, Save, 
+import {
+  Shield, Users, Settings, Save,
   Check, X, ChevronRight, Lock, Loader2, Info,
   ShieldAlert
 } from 'lucide-react';
@@ -26,7 +26,6 @@ const Roles = () => {
       const res = await api.get(API_ENDPOINTS.ROLES.BASE);
       setRoles(res.data.data);
     } catch (error) {
-      // Use a consistent ID to prevent double toasts during strict mode or re-renders
       toast.error('Failed to synchronize system roles', { id: 'roles-fetch-error' });
     } finally {
       setLoading(false);
@@ -38,10 +37,10 @@ const Roles = () => {
     try {
       const res = await api.get(API_ENDPOINTS.ROLES.GET_ONE(id));
       const { role, allPages: systemPages } = res.data.data;
-      
+
       setSelectedRole(role);
       setAllPages(systemPages);
-      
+
       const matrix = systemPages.map(page => {
         const existing = role.permissions.find(p => p.pageId === page.id);
         return {
@@ -106,14 +105,13 @@ const Roles = () => {
 
           <div className="space-y-2">
             {roles.map(role => (
-              <button 
+              <button
                 key={role.id}
                 onClick={() => fetchRoleDetails(role.id)}
-                className={`w-full text-left p-4 rounded-2xl border-2 transition-all flex items-center justify-between group ${
-                  selectedRole?.id === role.id 
-                    ? 'border-indigo-600 bg-indigo-50 text-indigo-900 shadow-lg shadow-indigo-50' 
-                    : 'border-slate-50 hover:border-indigo-100 hover:bg-slate-50 text-slate-600'
-                }`}
+                className={`w-full text-left p-4 rounded-2xl border-2 transition-all flex items-center justify-between group ${selectedRole?.id === role.id
+                  ? 'border-indigo-600 bg-indigo-50 text-indigo-900 shadow-lg shadow-indigo-50'
+                  : 'border-slate-50 hover:border-indigo-100 hover:bg-slate-50 text-slate-600'
+                  }`}
               >
                 <div>
                   <p className="font-black uppercase tracking-widest text-[11px] group-hover:text-indigo-600 transition-colors">
@@ -132,14 +130,13 @@ const Roles = () => {
           <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 mb-2">Authority Note</p>
           <h3 className="text-lg font-bold leading-tight mb-4 uppercase italic">Sovereign Matrix</h3>
           <p className="text-xs font-medium leading-relaxed opacity-80 uppercase tracking-tight">
-            {isSuperAdmin 
+            {isSuperAdmin
               ? 'You determine the operational boundaries of every subordinate role. Toggle actions across system modules to ensure perfect security.'
               : 'Security visibility mode active. You are viewing the global authority distribution for active administrative roles.'}
           </p>
         </div>
       </div>
 
-      {/* 2. Permission Matrix */}
       <div className="lg:col-span-2">
         {selectedRole ? (
           <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden animate-in slide-in-from-right-4 duration-300">
@@ -154,7 +151,7 @@ const Roles = () => {
                 </div>
               </div>
               {isSuperAdmin && (
-                <button 
+                <button
                   onClick={savePermissions}
                   disabled={saving || loading}
                   className="flex items-center gap-2 bg-slate-900 hover:bg-black text-white px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-xl disabled:opacity-50"
@@ -193,14 +190,13 @@ const Roles = () => {
                         </td>
                         {['canView'].map(action => (
                           <td key={action} className="px-6 py-4 text-center rounded-r-2xl border-y border-r border-slate-50 border-l-0">
-                            <button 
+                            <button
                               onClick={() => handleToggle(matrix.pageId, action)}
                               disabled={!isSuperAdmin || selectedRole.name === 'SUPER_ADMIN'}
-                              className={`w-9 h-9 rounded-xl mx-auto flex items-center justify-center transition-all border-2 ${
-                                matrix[action] 
-                                  ? 'bg-emerald-50 text-emerald-600 border-emerald-100 shadow-sm' 
-                                  : 'bg-slate-50 text-slate-200 border-slate-100'
-                              } ${isSuperAdmin && selectedRole.name !== 'SUPER_ADMIN' && 'hover:scale-110 active:scale-95 hover:bg-white cursor-pointer'} ${!isSuperAdmin && 'cursor-default'}`}
+                              className={`w-9 h-9 rounded-xl mx-auto flex items-center justify-center transition-all border-2 ${matrix[action]
+                                ? 'bg-emerald-50 text-emerald-600 border-emerald-100 shadow-sm'
+                                : 'bg-slate-50 text-slate-200 border-slate-100'
+                                } ${isSuperAdmin && selectedRole.name !== 'SUPER_ADMIN' && 'hover:scale-110 active:scale-95 hover:bg-white cursor-pointer'} ${!isSuperAdmin && 'cursor-default'}`}
                             >
                               {matrix[action] ? <Check size={16} /> : <X size={16} />}
                             </button>

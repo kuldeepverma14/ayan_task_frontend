@@ -10,9 +10,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  /**
-   * Authority Validator
-   */
   const hasPermission = useCallback((path) => {
     if (!user) return false;
     if (user.role?.name === 'SUPER_ADMIN') return true;
@@ -23,10 +20,6 @@ export const AuthProvider = ({ children }) => {
     return permission?.canView === true;
   }, [user]);
 
-  /**
-   * Universal Sync: Identity + Registry
-   * This is the single source of truth for 'Ready' state
-   */
   const syncSovereignty = async () => {
     try {
       const [profileRes, navRes] = await Promise.all([
@@ -49,9 +42,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  /**
-   * Initial Mount Sync
-   */
+
   useEffect(() => {
     const init = async () => {
       await syncSovereignty();
@@ -60,21 +51,14 @@ export const AuthProvider = ({ children }) => {
     init();
   }, []);
 
-  /**
-   * LOGIN FLOW:
-   * Perform pure login, then force a full Sovereignty Sync
-   */
+
   const login = async (email, password) => {
     setLoading(true);
     try {
-      // 1. Authenticate & Capture Token
       const loginRes = await api.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
       const { accessToken } = loginRes.data.data;
-      
-      // Store token for Header Sovereignty
-      localStorage.setItem('accessToken', accessToken);
 
-      // 2. Hydrate Full Profile & Registry
+      localStorage.setItem('accessToken', accessToken);
       const success = await syncSovereignty();
 
       if (!success) {

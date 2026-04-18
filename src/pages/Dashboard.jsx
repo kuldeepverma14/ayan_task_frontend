@@ -4,6 +4,7 @@ import Pagination from '../components/Pagination';
 import {
   Users as UsersIcon, Activity, AlertTriangle, TrendingUp, Clock
 } from 'lucide-react';
+import API_ENDPOINTS from '../api/endpoints';
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
@@ -13,7 +14,7 @@ const Dashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await api.get('/dashboard/stats');
+      const response = await api.get(API_ENDPOINTS.DASHBOARD.STATS);
       setStats(response.data.data);
     } catch (error) {
       console.error('Failed to fetch dashboard stats', error);
@@ -22,8 +23,7 @@ const Dashboard = () => {
 
   const fetchActivity = async (page = 1) => {
     try {
-      const response = await api.get(`/dashboard/activity?page=${page}&limit=5`);
-      console.log("response.data.data", response.data.data)
+      const response = await api.get(`${API_ENDPOINTS.DASHBOARD.ACTIVITY}?page=${page}&limit=5`);
       setActivities(response.data.data.items);
       setPagination(response.data.data);
     } catch (error) {
@@ -62,7 +62,6 @@ const Dashboard = () => {
         <p className="text-slate-500">Real-time overview of your system's security and activity status</p>
       </div>
 
-      {/* Anomaly Alert */}
       {stats?.anomalyCount > 0 && (
         <div className={`p-4 rounded-xl border flex items-center gap-4 ${stats.anomalyCount > 5 ? 'bg-rose-50 border-rose-200 text-rose-700' : 'bg-amber-50 border-amber-200 text-amber-700'
           }`}>
@@ -74,7 +73,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat, i) => (
           <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 group">
@@ -89,7 +87,6 @@ const Dashboard = () => {
         ))}
       </div>
 
-      {/* Recent Activity Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col p-2">
           <div className="p-6 border-b border-slate-100 flex items-center justify-between">

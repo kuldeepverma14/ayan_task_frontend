@@ -10,7 +10,7 @@ import Users from './pages/Users';
 import AuditLogs from './pages/AuditLogs';
 import Roles from './pages/Roles';
 import Modules from './pages/Modules';
-import Settings from './pages/Settings'; // 🔥 NEW: Architecture Console
+import Settings from './pages/Settings';
 
 const router = createBrowserRouter([
   {
@@ -86,13 +86,13 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <AuthProvider>
-      <Toaster 
-        position="top-right" 
+      <Toaster
+        position="top-right"
         reverseOrder={false}
         toastOptions={{
           className: 'font-sans font-bold text-sm rounded-xl border border-slate-100 shadow-xl',
           duration: 3000,
-        }} 
+        }}
       />
       <RouterProvider router={router} />
     </AuthProvider>

@@ -2,15 +2,13 @@ import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Pagination = ({ pagination, onPageChange }) => {
-  // Defensive Destructuring with defaults
-  const { 
-    page = 1, 
-    totalPages = 1, 
-    total = 0, 
-    limit = 10 
+  const {
+    page = 1,
+    totalPages = 1,
+    total = 0,
+    limit = 10
   } = pagination || {};
 
-  // Calculate high-precision ranges
   const startRange = total === 0 ? 0 : (page - 1) * limit + 1;
   const endRange = Math.min(page * limit, total);
 
@@ -51,8 +49,8 @@ const Pagination = ({ pagination, onPageChange }) => {
                 onClick={() => onPageChange(pageNum)}
                 className={`
                   w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black transition-all
-                  ${page === pageNum 
-                    ? 'bg-primary-600 text-white shadow-lg shadow-primary-200' 
+                  ${page === pageNum
+                    ? 'bg-primary-600 text-white shadow-lg shadow-primary-200'
                     : 'text-slate-400 hover:bg-white hover:text-slate-900 hover:shadow-sm'}
                 `}
               >

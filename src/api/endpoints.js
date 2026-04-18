@@ -1,6 +1,4 @@
-/**
- * Single Source of Truth for all Backend API Endpoints
- */
+
 
 const API_ENDPOINTS = {
   // Auth
@@ -34,7 +32,7 @@ const API_ENDPOINTS = {
     SIDEBAR: '/modules',
     REORDER: '/modules/reorder',
     DELETE: (id) => `/modules/${id}`,
-    
+
     // Sub-Pages
     CREATE_PARENT: '/modules/parent',
     CREATE_PAGE: '/modules/page',
